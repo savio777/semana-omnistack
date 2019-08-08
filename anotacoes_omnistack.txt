@@ -1,0 +1,3 @@
+verbos HTTP REST: GET, POST, DELETE, PUT
+
+funções de um controller: INDEX, SHOW, STORE, UPDATE, DELETE
