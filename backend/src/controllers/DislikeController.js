@@ -6,20 +6,17 @@ module.exports = {
         const { user } = req.headers
 
         const currentUser = await DevModel.findById(user)
-        const likedUser = await DevModel.findById(devId)
+        const dislikedUser = await DevModel.findById(devId)
 
-        if (!likedUser) {
+        if (!dislikedUser) {
             return res.status(400).json({ error: 'Dev not exist' })
         }
 
-        if (likedUser.likes.includes(currentUser._id)) {
-            return res.json({ match: true })
-        }
-
-        currentUser.likes.push(likedUser._id)
+        currentUser.dislikes.push(dislikedUser._id)
 
         await currentUser.save()
 
         return res.json(currentUser)
+
     }
 }

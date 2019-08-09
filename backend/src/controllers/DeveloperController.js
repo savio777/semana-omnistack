@@ -9,7 +9,7 @@ module.exports = {
         const userExist = await DevModel.findOne({ user: user })
 
         if (userExist) {
-            return res.json({exist: true})
+            return res.json({ exist: true })
         }
 
         const response = await axios.get(`https://api.github.com/users/${user}`)
@@ -23,6 +23,26 @@ module.exports = {
             avatar: avatar_url
         })
 
-        return res.json({criado: true})
+        return res.json({ criado: true })
+    },
+
+    async index(req, res) {
+        const { user } = req.headers
+
+        const currentUser = await DevModel.findById(user)
+
+        if (!currentUser) {
+            return res.status(400).json({ error: 'Dev not exist' })
+        }
+
+        const users = await DevModel.find({
+            $and: [
+                { _id: { $ne: user } },
+                { _id: { $nin: currentUser.likes } },
+                { _id: { $nin: currentUser.dislikes } }
+            ]
+        })
+
+        return res.json(users)
     }
 }
