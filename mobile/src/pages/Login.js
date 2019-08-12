@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 
 import {
   StyleSheet,
@@ -10,21 +10,52 @@ import {
   StatusBar
 } from 'react-native'
 
+import api from '../services/api'
+
+import AsyncStorage from '@react-native-community/async-storage';
+
 import logo from '../../assets/logo.png'
 
-function Login() {
+function Login({ navigation }) {
+
+  const [user, setUse] = useState('')
+
+  useEffect(() => {
+    AsyncStorage.getItem('user').then((user) => {
+      if (user) {
+        navigation.navigate('Main', { user })
+      }
+    })
+  }, [])
+
+  async function handleLogin() {
+    const response = await api.post('dev', {
+      user: user
+    })
+
+    const { _id } = response.data
+
+    await AsyncStorage.setItem('user', _id)
+
+    navigation.navigate('Main', { _id })
+  }
+
+
   return (
     <Fragment>
       <View style={styles.container}>
+        <StatusBar backgroundColor='#f5f5f5' barStyle='dark-content' />
         <Image source={logo} />
         <TextInput
           style={styles.input}
           placeholder='Seu user do Github'
           autoCapitalize='none'
-          autoCorrect={false}
+          value={user}
+          onChangeText={setUse}
         />
         <TouchableOpacity
           style={styles.button}
+          onPress={handleLogin}
         >
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
