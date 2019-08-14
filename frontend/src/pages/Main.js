@@ -30,6 +30,9 @@ function Main({ match }) {
       query: {user: match.params.id}
     })
 
+    socket.on('match', (dev) => {
+      console.log(dev)
+    })
     
   }, [match.params.id])
 

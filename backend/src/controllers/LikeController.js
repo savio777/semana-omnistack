@@ -1,31 +1,43 @@
 const DevModel = require('../models/Developer')
+const MatchModel = require('../models/Match')
 
 module.exports = {
     async store(req, res) {
-//      console.log(req.io)
-//      console.log(req.connectedUsers)
+        //      console.log(req.io)
+        //      console.log(req.connectedUsers)
 
         const { devId } = req.params
         const { user } = req.headers
 
-        const currentUser = await DevModel.findById(user)
+        const loggedUser = await DevModel.findById(user)
         const likedUser = await DevModel.findById(devId)
 
         if (!likedUser) {
             return res.status(400).json({ error: 'Dev not exist' })
         }
 
-        if (likedUser.likes.includes(currentUser._id)) {
-//          console.log('deu match')
-            
-            // CONTINUAR
-            // 18:57 do ultimo video da semana omnistack
+        if (likedUser.likes.includes(loggedUser._id)) {
+            //          console.log('deu match')
+            const loggedSocket = req.connectedUsers[user]
+            const likedSocket = req.connectedUsers[devId]
+
+            if (loggedSocket) {
+                req.io.to(loggedSocket).emit('match', likedUser)
+            }
+
+            if (likedSocket) {
+                req.io.to(likedSocket).emit('match', loggedUser)
+            }
+
+            MatchModel.create({
+                id_users: [loggedUser, likedUser]
+            })
         }
 
-        currentUser.likes.push(likedUser._id)
+        loggedUser.likes.push(likedUser._id)
 
-        await currentUser.save()
+        await loggedUser.save()
 
-        return res.json(currentUser)
+        return res.json(loggedUser)
     }
 }
