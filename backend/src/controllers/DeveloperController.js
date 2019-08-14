@@ -32,8 +32,6 @@ module.exports = {
         const currentUser = await DevModel.findOne({ _id: user })
 
         if (!currentUser) {
-            //return res.json(req.headers)
-            //return res.json({_id: user})
             return res.status(400).json({ error: 'Dev not exist' })
         }
 

@@ -2,6 +2,9 @@ const DevModel = require('../models/Developer')
 
 module.exports = {
     async store(req, res) {
+//      console.log(req.io)
+//      console.log(req.connectedUsers)
+
         const { devId } = req.params
         const { user } = req.headers
 
@@ -13,8 +16,10 @@ module.exports = {
         }
 
         if (likedUser.likes.includes(currentUser._id)) {
-            //return res.json({ match: true })
-            console.log('deu match')
+//          console.log('deu match')
+            
+            // CONTINUAR
+            // 18:57 do ultimo video da semana omnistack
         }
 
         currentUser.likes.push(likedUser._id)

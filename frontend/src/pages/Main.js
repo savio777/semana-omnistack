@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import io from 'socket.io-client'
 import { Link } from 'react-router-dom'
 
 import './Main.css'
@@ -12,6 +13,7 @@ import dislike from '../assets/dislike.svg'
 function Main({ match }) {
   const [users, setUsers] = useState([])
 
+  // request the api
   useEffect(() => {
     async function loadUser() {
       const response = await api.get('/dev', {
@@ -20,6 +22,15 @@ function Main({ match }) {
       setUsers(response.data)
     }
     loadUser()
+  }, [match.params.id])
+
+  // request the socket.io
+  useEffect(() => {
+    const socket = io('http://localhost:7777', {
+      query: {user: match.params.id}
+    })
+
+    
   }, [match.params.id])
 
   async function handleLike(id) {
