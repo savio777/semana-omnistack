@@ -13,7 +13,8 @@ module.exports = {
         }
 
         if (likedUser.likes.includes(currentUser._id)) {
-            return res.json({ match: true })
+            //return res.json({ match: true })
+            console.log('deu match')
         }
 
         currentUser.likes.push(likedUser._id)

@@ -6,10 +6,6 @@ const DislikeController = require('./controllers/DislikeController')
 
 const routes = express.Router()
 
-routes.get('/', (req, res) => {
-    return res.send(`oi ${req.query.nome} :)`)
-})
-
 routes.get('/dev', DeveloperController.index)
 
 routes.post('/dev', DeveloperController.store)
