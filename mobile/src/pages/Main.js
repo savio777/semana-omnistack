@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   StatusBar
 } from 'react-native'
+import io from 'socket.io-client'
 
 import api from '../services/api'
 
@@ -16,12 +17,15 @@ import logo from '../../assets/logo.png'
 
 import like from '../../assets/like.png'
 import dislike from '../../assets/dislike.png'
+import match from '../../assets/match.png'
 
 function Main({ navigation }) {
 
   const logged = navigation.getParam('_id')
   const [users, setUsers] = useState([])
+  const [matchDev, setMatchDev] = useState(true)
 
+  // request api
   useEffect(() => {
     async function loadUser() {
       const response = await api.get('/dev', {
@@ -30,6 +34,17 @@ function Main({ navigation }) {
       setUsers(response.data)
     }
     loadUser()
+  }, [logged])
+
+  // request socket.io
+  useEffect(() => {
+    const socket = io('192.168.0.111:7777', {
+      query: { user: logged }
+    })
+
+    socket.on('match', (dev) => {
+      setMatchDev(dev)
+    })
   }, [logged])
 
   async function handleLike() {
@@ -86,14 +101,34 @@ function Main({ navigation }) {
         ))) : <Text style={styles.empty}>Acabou:(</Text>}
       </View>
 
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleLike} >
-          <Image source={like} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleDislike}>
-          <Image source={dislike} />
-        </TouchableOpacity>
-      </View>
+      {(users.length > 0) ?
+        (<View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleLike} >
+            <Image source={like} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleDislike}>
+            <Image source={dislike} />
+          </TouchableOpacity>
+        </View>
+        ) : (<View />)
+      }
+
+      {(matchDev) ?
+        (
+          <View style={styles.matchContainer}>
+            <TouchableOpacity onPress={()=> setMatchDev(null)}>
+              <Text style={styles.textExitButton}>X</Text>
+            </TouchableOpacity>
+            <Image style={styles.matchImage} source={match} />
+            <Image
+              style={styles.matchAvatar}
+              source={{ uri: 'https://avatars0.githubusercontent.com/u/4248081?v=4' }} 
+            />
+            <Text style={styles.matchName}>Nome do User</Text>
+            <Text style={styles.matchBio}> bla bla bla bla bla blabla bla blabla bla blabla bla blabla bla bla</Text>
+          </View>
+        ) : (null)
+      }
     </SafeAreaView>
 
   )
@@ -167,6 +202,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 20,
     elevation: 2,
+  },
+
+  matchContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  matchAvatar: {
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    borderWidth: 5,
+    borderColor: '#FFF',
+    marginVertical: 30,
+  },
+  matchName: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#FFF'
+  },
+  matchImage: {
+    width: 350,
+    height: 150,
   }
 })
 
