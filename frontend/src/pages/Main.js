@@ -13,7 +13,7 @@ import itsamatch from '../assets/match.png'
 
 function Main({ match }) {
   const [users, setUsers] = useState([])
-  const [matchDev, setMatchDev] = useState(true)
+  const [matchDev, setMatchDev] = useState(null)
 
   // request the api
   useEffect(() => {
@@ -33,7 +33,7 @@ function Main({ match }) {
     })
 
     socket.on('match', (dev) => {
-      console.log(dev)
+      setMatchDev(dev)
     })
 
   }, [match.params.id])
@@ -90,10 +90,11 @@ function Main({ match }) {
       {(matchDev) ?
         (
           <div className="match-container">
+            <button type="button" onClick={()=> setMatchDev(null)}>X</button>
             <img className="match" src={itsamatch} alt="its a match" />
-            <img className="avatar" src="https://avatars2.githubusercontent.com/u/2254731?v=4" alt="teste" />
-            <strong>Nome do User</strong>
-            <p>a bio do user bla bla bla bla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla bla </p>
+            <img className="avatar" src={matchDev.avatar} alt="teste" />
+            <strong>{matchDev.name}</strong>
+            <p>{matchDev.bio}</p>
           </div>
         ) : (<div />)}
     </div>

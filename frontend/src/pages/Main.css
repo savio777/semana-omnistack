@@ -113,11 +113,11 @@
 }
 
 .match-container button {
+  margin-left: 950px;
   border: 0;
   background: none;
   font-weight: bold;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 18px;
-  margin-top: 30px;
+  color: rgba(0, 0, 0);
+  font-size: 25px;
   cursor: pointer;
 }
