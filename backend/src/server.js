@@ -17,8 +17,6 @@ const connectedUsers = {}
 io.on('connection', (socket) => {
     const { user } = socket.handshake.query
 
-//    console.log(`id do user~> ${user}, id do socket~> ${socket.id}`)
-
     connectedUsers[user] = socket.id
 })
 

@@ -3,9 +3,6 @@ const MatchModel = require('../models/Match')
 
 module.exports = {
     async store(req, res) {
-        //      console.log(req.io)
-        //      console.log(req.connectedUsers)
-
         const { devId } = req.params
         const { user } = req.headers
 
@@ -17,7 +14,6 @@ module.exports = {
         }
 
         if (likedUser.likes.includes(loggedUser._id)) {
-            //          console.log('deu match')
             const loggedSocket = req.connectedUsers[user]
             const likedSocket = req.connectedUsers[devId]
 
