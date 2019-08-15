@@ -30,7 +30,8 @@ module.exports = {
             }
 
             MatchModel.create({
-                id_users: [loggedUser, likedUser]
+                id_users: [loggedUser._id, likedUser._id],
+                name_users: [loggedUser.user, likedUser.user]
             })
         }
 

@@ -5,10 +5,10 @@ const MatchSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     }],
-/*    name_users: [{
+    name_users: [{
         type: String,
         required: true
-    }]*/
+    }]
 }, { timestamps: { createdAt: 'created' } })
 
 module.exports = model('Matchs', MatchSchema)
