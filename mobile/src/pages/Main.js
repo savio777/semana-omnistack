@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
+
 import AsyncStorage from '@react-native-community/async-storage'
+
 import {
   Text,
   Image,
@@ -9,21 +11,21 @@ import {
   TouchableOpacity,
   StatusBar
 } from 'react-native'
+
 import io from 'socket.io-client'
 
 import api from '../services/api'
 
 import logo from '../../assets/logo.png'
-
 import like from '../../assets/like.png'
 import dislike from '../../assets/dislike.png'
 import match from '../../assets/match.png'
 
 function Main({ navigation }) {
 
-  const logged = navigation.getParam('_id')
+  const logged = navigation.getParam('user')
   const [users, setUsers] = useState([])
-  const [matchDev, setMatchDev] = useState(true)
+  const [matchDev, setMatchDev] = useState(null)
 
   // request api
   useEffect(() => {
@@ -39,6 +41,7 @@ function Main({ navigation }) {
   // request socket.io
   useEffect(() => {
     const socket = io('192.168.0.111:7777', {
+      secure: true,
       query: { user: logged }
     })
 
@@ -98,7 +101,7 @@ function Main({ navigation }) {
               </Text>
             </View>
           </View>
-        ))) : <Text style={styles.empty}>Acabou:(</Text>}
+        ))) : <Text style={styles.empty}>Acabou :(</Text>}
       </View>
 
       {(users.length > 0) ?
@@ -113,21 +116,21 @@ function Main({ navigation }) {
         ) : (<View />)
       }
 
-      {(matchDev) ?
+      {(matchDev) &&
         (
           <View style={styles.matchContainer}>
-            <TouchableOpacity onPress={()=> setMatchDev(null)}>
+            <TouchableOpacity onPress={() => setMatchDev(null)}>
               <Text style={styles.textExitButton}>X</Text>
             </TouchableOpacity>
             <Image style={styles.matchImage} source={match} />
             <Image
               style={styles.matchAvatar}
-              source={{ uri: 'https://avatars0.githubusercontent.com/u/4248081?v=4' }} 
+              source={matchDev.avatar}
             />
-            <Text style={styles.matchName}>Nome do User</Text>
-            <Text style={styles.matchBio}> bla bla bla bla bla blabla bla blabla bla blabla bla blabla bla bla</Text>
+            <Text style={styles.matchName}>{matchDev.name}</Text>
+            <Text style={styles.matchBio}>{matchDev.bio}</Text>
           </View>
-        ) : (null)
+        )
       }
     </SafeAreaView>
 
@@ -205,7 +208,13 @@ const styles = StyleSheet.create({
   },
 
   matchContainer: {
-    ...StyleSheet.absoluteFillObject,
+    // didn't work as it should in android
+    //...StyleSheet.absoluteFillObject,
+    /*position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,*/
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     justifyContent: 'center',
     alignItems: 'center'
@@ -224,8 +233,22 @@ const styles = StyleSheet.create({
     color: '#FFF'
   },
   matchImage: {
-    width: 350,
     height: 150,
+    resizeMode: 'contain'
+  },
+  matchBio: {
+    fontSize: 16,
+    marginTop: 10,
+    lineHeight: 24,
+    textAlign: 'center',
+    color: 'rgba(255, 255, 255, 0.8)',
+    paddingHorizontal: 30
+  },
+  textExitButton: {
+    marginLeft: 320,
+    fontWeight: 'bold',
+    fontSize: 30,
+    color: 'rgba(255, 255, 255, 0.8)'
   }
 })
 
