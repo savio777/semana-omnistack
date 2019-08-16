@@ -12,7 +12,8 @@ import {
   StatusBar
 } from 'react-native'
 
-import io from 'socket.io-client'
+import io from 'engine.io-client'
+//import io from 'socket.io-client'
 
 import api from '../services/api'
 
