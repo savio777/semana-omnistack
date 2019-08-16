@@ -12,8 +12,8 @@ import {
   StatusBar
 } from 'react-native'
 
-import io from 'engine.io-client'
-//import io from 'socket.io-client'
+//import io from 'engine.io-client'
+import io from 'socket.io-client'
 
 import api from '../services/api'
 
@@ -39,10 +39,10 @@ function Main({ navigation }) {
     loadUser()
   }, [logged])
 
-  // request socket.io
+  // request the socket.io
   useEffect(() => {
-    const socket = io('192.168.0.111:7777', {
-      secure: true,
+    //const socket = io('http://192.168.0.111:7777', {
+    const socket = io('http://localhost:7777', {
       query: { user: logged }
     })
 
