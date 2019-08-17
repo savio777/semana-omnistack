@@ -41,7 +41,6 @@ function Main({ navigation }) {
 
   // request the socket.io
   useEffect(() => {
-    //const socket = io('http://192.168.0.111:7777', {
     const socket = io('http://localhost:7777', {
       query: { user: logged }
     })
@@ -126,7 +125,7 @@ function Main({ navigation }) {
             <Image style={styles.matchImage} source={match} />
             <Image
               style={styles.matchAvatar}
-              source={matchDev.avatar}
+              source={{ uri: matchDev.avatar }}
             />
             <Text style={styles.matchName}>{matchDev.name}</Text>
             <Text style={styles.matchBio}>{matchDev.bio}</Text>

@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-//const myUrl = 'localhost'
-const myUrl = '192.168.0.111'
+const myUrl = 'localhost'
 
 const api = axios.create({
     baseURL: `http://${myUrl}:7777`

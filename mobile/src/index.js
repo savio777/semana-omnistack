@@ -1,9 +1,9 @@
 import React from 'react'
-/*import { YellowBox } from 'react-native'
+import { YellowBox } from 'react-native'
 
 YellowBox.ignoreWarnings([
-  'Error: Network Error...'
-])*/
+  'Unrecognized WebSocket'
+])
 
 import Routes from './routes'
 
